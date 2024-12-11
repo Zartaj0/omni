@@ -277,6 +277,7 @@ func newDelegateCmd() *cobra.Command {
 	return cmd
 }
 
+// Note(zodomo): This still needs to be updated to support non-self delegation.
 func delegate(ctx context.Context, cfg delegateConfig) error {
 	delegatorPriv, err := cfg.privateKey()
 	if err != nil {
@@ -320,7 +321,7 @@ func delegate(ctx context.Context, cfg delegateConfig) error {
 	}
 	txOpts.Value = new(big.Int).Mul(umath.NewBigInt(cfg.Amount), big.NewInt(params.Ether)) // Send self-delegation
 
-	tx, err := contract.Delegate(txOpts, delegatorAddr)
+	tx, err := contract.Delegate(txOpts, delegatorAddr, delegatorAddr)
 	if err != nil {
 		return errors.Wrap(err, "create validator")
 	}
